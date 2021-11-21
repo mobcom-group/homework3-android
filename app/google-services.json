@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "6307995471",
+    "project_id": "mobcom-f1a53",
+    "storage_bucket": "mobcom-f1a53.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:6307995471:android:5c8b9ded152d093851ef3a",
+        "android_client_info": {
+          "package_name": "com.lazudanizaidan.chatapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "6307995471-kkied46eo4iu8bdlu4uom03d7upc37ud.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB261frQQ_ADMNR5faLu7T_kKwZrnm7wac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "6307995471-kkied46eo4iu8bdlu4uom03d7upc37ud.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
