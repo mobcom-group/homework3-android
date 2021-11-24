@@ -1,65 +1,50 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/img_background_2"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/vertical_margin_8dp"
+    android:paddingLeft="@dimen/horizontal_margin_8dp"
+    android:paddingRight="@dimen/horizontal_margin_8dp"
+    android:paddingTop="@dimen/vertical_margin_8dp"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <RadioGroup
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/editTextChat">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <ScrollView
+        <RadioButton
+            android:id="@+id/radio_button_my_self_activity_main"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="My Self" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+        <RadioButton
+            android:id="@+id/radio_button_user_activity_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="User" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-        </ScrollView>
-
-    </LinearLayout>
+    </RadioGroup>
 
     <EditText
-        android:id="@+id/editTextChat"
-        android:layout_width="250dp"
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Message"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/button_image" />
+        android:hint="Message"
+        android:inputType="text"
+        android:maxLines="1"
+        android:singleLine="true" />
 
-    <Button
-        android:id="@+id/button_send"
-        android:layout_width="75dp"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:text="Send"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_chat_activity_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/vertical_margin_8dp" />
 
-    <Button
-        android:id="@+id/button_image"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:foreground="@drawable/ic_baseline_image_24"
-        android:foregroundGravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/button_send"
-        tools:ignore="SpeakableTextPresentCheck" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
