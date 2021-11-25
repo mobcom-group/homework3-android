@@ -2,13 +2,15 @@ package com.lazudanizaidan.chatapplication
 
 import android.Manifest
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.media.MediaScannerConnection
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -19,7 +21,9 @@ import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.tasks.OnCompleteListener
@@ -40,8 +44,27 @@ class MainActivity : AppCompatActivity() {
     private val requestCodeCamera = 2
     private val requestCodePermission = 100
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        val message = intent?.getStringExtra("message");
+        if (message != null) {
+            sendMessageFromTopicToChat(message)
+        }
+    }
+
+    private val mReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent) {
+            val receivedMessage = intent.getStringExtra("message")
+            if (receivedMessage != null) {
+                sendMessageFromTopicToChat(receivedMessage)
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, IntentFilter("message"));
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.w(TAG, "Fetching FCM registration token failed", task.exception)
@@ -232,6 +255,16 @@ class MainActivity : AppCompatActivity() {
             return File(selectedImagePath)
         }
         return null
+    }
+
+    private fun sendMessageFromTopicToChat(message: String) {
+        val typeChat = AdapterChat.VIEW_TYPE_USER
+        val dateTime = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.US)
+            .format(Date())
+        val chat = Chat(message = message, dateTime = dateTime, image = "")
+        listViewType.add(typeChat)
+        listChat.add(chat)
+        adapterChat.notifyDataSetChanged()
     }
 
 }

@@ -9,13 +9,13 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import java.util.*
+
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
-
     /**
      * Called when message is received.
      *
@@ -41,17 +41,20 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         if (remoteMessage.data.isNotEmpty()) {
             Log.d(TAG, "Message data payload: ${remoteMessage.data}")
 
-            if (/* Check if data needs to be processed by long running job */ true) {
-                // For long-running tasks (10 seconds or more) use WorkManager.
-//                scheduleJob()
-            } else {
-                // Handle message within 10 seconds
-                handleNow()
-            }
+//            if (/* Check if data needs to be processed by long running job */ true) {
+//                // For long-running tasks (10 seconds or more) use WorkManager.
+////                scheduleJob()
+//            } else {
+//                // Handle message within 10 seconds
+//                handleNow()
+//            }
         }
 
         // Check if message contains a notification payload.
         remoteMessage.notification?.let {
+//            it.body?.let { it1 -> sendMessageFromTopicToChat(it1) }
+            val intent: Intent = Intent("message").putExtra("message", it.body)
+            LocalBroadcastManager.getInstance(this@MyFirebaseMessagingService).sendBroadcast(intent)
             Log.d(TAG, "Message Notification Body: ${it.body}")
         }
 
