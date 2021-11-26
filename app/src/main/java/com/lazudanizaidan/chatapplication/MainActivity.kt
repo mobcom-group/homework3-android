@@ -28,12 +28,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
+import com.lazudanizaidan.chatapplication.api.RetroInstance
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import com.lazudanizaidan.chatapplication.Token
 
 class MainActivity : AppCompatActivity() {
     private lateinit var listViewType: MutableList<Int>
@@ -78,6 +83,29 @@ class MainActivity : AppCompatActivity() {
             val msg = getString(R.string.msg_token_fmt, token)
             Log.d(TAG, msg)
             Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+            val tokenJson = Token()
+            tokenJson.token = token.toString()
+            val requestCall = RetroInstance.api.registerToken(tokenJson)
+
+            requestCall.enqueue(object: Callback<ApiResponse> {
+
+                override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+                    println("masuk response")
+                    if (response.isSuccessful) {
+                        var responseApi = response.body() // Use it or ignore it
+                        println(responseApi)
+
+//                    Toast.makeText(context, "Successfully Added", Toast.LENGTH_SHORT).show()
+                    } else {
+//                    Toast.makeText(context, "Failed to add item", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                    println("masuk on failure")
+                    println(t.message)
+                }
+            })
         })
         setContentView(R.layout.activity_main)
 
