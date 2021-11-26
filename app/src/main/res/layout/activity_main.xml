@@ -27,6 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:visibility="gone"
             tools:visibility="gone">
 
             <RadioButton
@@ -35,14 +36,18 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checked="true"
-                android:text="My Self" />
+                android:text="My Self"
+                android:visibility="gone"
+                tools:visibility="gone" />
 
             <RadioButton
                 android:id="@+id/radio_button_user_activity_main"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="User" />
+                android:text="User"
+                android:visibility="gone"
+                tools:visibility="gone" />
 
         </RadioGroup>
 
