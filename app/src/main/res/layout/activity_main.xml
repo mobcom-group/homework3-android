@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -44,45 +45,52 @@
 
         </RadioGroup>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_chat_activity_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/vertical_margin_8dp" />
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
         <EditText
             android:id="@+id/editText"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:hint="Message"
             android:imeOptions="actionDone"
             android:inputType="text"
             android:maxLines="1"
-            android:singleLine="true" />
+            android:singleLine="true"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="258dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/button_send_image_activity_main"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/button_send_image_activity_main"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginRight="5dp"
+            android:foreground="@drawable/ic_baseline_image_24"
+            android:foregroundGravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/button_send_message_activity_main"
+            tools:ignore="ButtonStyle,SpeakableTextPresentCheck" />
 
-            <Button
-                android:id="@+id/button_send_message_activity_main"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Message"
-                tools:ignore="ButtonStyle" />
-
-            <Button
-                android:id="@+id/button_send_image_activity_main"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Image"
-                tools:ignore="ButtonStyle" />
-
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_chat_activity_main"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/vertical_margin_8dp" />
-
-    </LinearLayout>
+        <Button
+            android:id="@+id/button_send_message_activity_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:ignore="ButtonStyle" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>
