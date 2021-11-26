@@ -37,11 +37,11 @@ class AdapterChat constructor(private val listViewType: List<Int>,
                 VIEW_TYPE_MY_SELF -> {
                     val viewHolderChatItemMySelf = holder as ViewHolderChatItemMySelf
                     chat.apply {
-                        viewHolderChatItemMySelf.textViewDateTime.text = this.dateTime
+                        viewHolderChatItemMySelf.textViewDateTime.text = this.time
                         viewHolderChatItemMySelf.textViewMessage.text = this.message
-                        val bitmap = BitmapFactory.decodeFile(this.image)
+                        val bitmap = BitmapFactory.decodeFile(this.imagebase64)
                         viewHolderChatItemMySelf.imageViewMessage.setImageBitmap(bitmap)
-                        if (this.message.isEmpty()) {
+                        if (this.message!!.isEmpty()) {
                             viewHolderChatItemMySelf.textViewMessage.visibility = View.GONE
                             viewHolderChatItemMySelf.imageViewMessage.visibility = View.VISIBLE
                         } else {
@@ -53,11 +53,11 @@ class AdapterChat constructor(private val listViewType: List<Int>,
                 else -> {
                     val viewHolderChatUser = holder as ViewHolderChatItemUser
                     chat.apply {
-                        viewHolderChatUser.textViewDateTime.text = chat.dateTime
+                        viewHolderChatUser.textViewDateTime.text = chat.time
                         viewHolderChatUser.textViewMessage.text = chat.message
-                        val bitmap = BitmapFactory.decodeFile(this.image)
+                        val bitmap = BitmapFactory.decodeFile(this.imagebase64)
                         viewHolderChatUser.imageViewMessage.setImageBitmap(bitmap)
-                        if (this.message.isEmpty()) {
+                        if (this.message!!.isEmpty()) {
                             viewHolderChatUser.textViewMessage.visibility = View.GONE
                             viewHolderChatUser.imageViewMessage.visibility = View.VISIBLE
                         } else {

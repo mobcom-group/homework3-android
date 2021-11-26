@@ -58,11 +58,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // Check if message contains a notification payload.
         remoteMessage.notification?.let {
 //            it.body?.let { it1 -> sendMessageFromTopicToChat(it1) }
-            val intent: Intent = Intent("message").putExtra("message", it.body)
-            LocalBroadcastManager.getInstance(this@MyFirebaseMessagingService).sendBroadcast(intent)
             Log.d(TAG, "Message Notification Body: ${it.body}")
         }
 
+        val intent: Intent = Intent("message").putExtra("message", remoteMessage.notification!!.body)
+        intent.putExtra("time", remoteMessage.data["time"])
+        intent.putExtra("senderUUID", remoteMessage.data["senderUUID"])
+//        println(remoteMessage.data["time"] + "myfirebase ")
+        LocalBroadcastManager.getInstance(this@MyFirebaseMessagingService).sendBroadcast(intent)
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
     }

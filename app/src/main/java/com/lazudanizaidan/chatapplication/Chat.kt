@@ -1,7 +1,8 @@
 package com.lazudanizaidan.chatapplication
 
 data class Chat(
-    val message: String,
-    val image: String,
-    val dateTime: String
+    var message: String? = null,
+    var imagebase64: String? = null,
+    var time: String? = null,
+    var senderUUID: String? = null
 )

@@ -38,30 +38,25 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
-import com.lazudanizaidan.chatapplication.Token
 
 class MainActivity : AppCompatActivity() {
     private lateinit var listViewType: MutableList<Int>
     private lateinit var listChat: MutableList<Chat>
     private lateinit var adapterChat: AdapterChat
 
+    private val uuid = UUID.randomUUID()
     private val requestCodeGallery = 1
     private val requestCodeCamera = 2
     private val requestCodePermission = 100
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-
-        val message = intent?.getStringExtra("message");
-        if (message != null) {
-            sendMessageFromTopicToChat(message)
-        }
-    }
 
     private val mReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
             val receivedMessage = intent.getStringExtra("message")
-            if (receivedMessage != null) {
+            val time = intent?.getStringExtra("time");
+            val senderUUID = intent?.getStringExtra("senderUUID");
+//            println(time +  "sender nih: " + senderUUID)
+            if (receivedMessage != null && senderUUID != uuid.toString() ) {
                 sendMessageFromTopicToChat(receivedMessage)
             }
         }
@@ -92,12 +87,10 @@ class MainActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                     println("masuk response")
                     if (response.isSuccessful) {
-                        var responseApi = response.body() // Use it or ignore it
+                        var responseApi = response.body()
                         println(responseApi)
 
-//                    Toast.makeText(context, "Successfully Added", Toast.LENGTH_SHORT).show()
                     } else {
-//                    Toast.makeText(context, "Failed to add item", Toast.LENGTH_SHORT).show()
                     }
                 }
 
@@ -120,6 +113,7 @@ class MainActivity : AppCompatActivity() {
         val buttonSendMessage: Button = findViewById(R.id.button_send_message_activity_main)
         buttonSendMessage.setOnClickListener {
             sendTextMessage()
+
         }
         val buttonSendImage: Button = findViewById(R.id.button_send_image_activity_main)
         buttonSendImage.setOnClickListener {
@@ -174,13 +168,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun sendTextMessage() {
-        val radioGroup: RadioGroup = findViewById(R.id.radio_group_activity_main)
-        val idTypeChat = radioGroup.checkedRadioButtonId
-        val typeChat = if (idTypeChat == R.id.radio_button_my_self_activity_main) {
-            AdapterChat.VIEW_TYPE_MY_SELF
-        } else {
-            AdapterChat.VIEW_TYPE_USER
-        }
+//        val radioGroup: RadioGroup = findViewById(R.id.radio_group_activity_main)
+//        val idTypeChat = radioGroup.checkedRadioButtonId
+//        val typeChat = if (idTypeChat == R.id.radio_button_my_self_activity_main) {
+//            AdapterChat.VIEW_TYPE_MY_SELF
+//        } else {
+//            AdapterChat.VIEW_TYPE_USER
+//        }
+        val typeChat = AdapterChat.VIEW_TYPE_MY_SELF
         val editText: EditText = findViewById(R.id.editText)
         val message = editText.text.toString().trim()
         if (message.isEmpty()) {
@@ -189,10 +184,11 @@ class MainActivity : AppCompatActivity() {
         } else {
             val dateTime = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.US)
                 .format(Date())
-            val chat = Chat(message = message, dateTime = dateTime, image = "")
+            val chat = Chat(message = message, time = dateTime, imagebase64 = "")
             listViewType.add(typeChat)
             listChat.add(chat)
             adapterChat.notifyDataSetChanged()
+            sendMessageToServer(message)
         }
     }
 
@@ -222,7 +218,7 @@ class MainActivity : AppCompatActivity() {
                         val message = ""
                         val dateTime = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.US)
                             .format(Date())
-                        val chat = Chat(message = message, dateTime = dateTime, image = fileImage.absolutePath)
+                        val chat = Chat(message = message, time = dateTime, imagebase64 = fileImage.absolutePath)
                         listViewType.add(typeChat)
                         listChat.add(chat)
                         adapterChat.notifyDataSetChanged()
@@ -256,7 +252,7 @@ class MainActivity : AppCompatActivity() {
                         val message = ""
                         val dateTime = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.US)
                             .format(Date())
-                        val chat = Chat(message = message, dateTime = dateTime, image = fileImage.absolutePath)
+                        val chat = Chat(message = message, time = dateTime, imagebase64 = fileImage.absolutePath)
                         listViewType.add(typeChat)
                         listChat.add(chat)
                         adapterChat.notifyDataSetChanged()
@@ -289,10 +285,38 @@ class MainActivity : AppCompatActivity() {
         val typeChat = AdapterChat.VIEW_TYPE_USER
         val dateTime = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.US)
             .format(Date())
-        val chat = Chat(message = message, dateTime = dateTime, image = "")
+        val chat = Chat(message = message, time = dateTime, imagebase64 = "")
         listViewType.add(typeChat)
         listChat.add(chat)
         adapterChat.notifyDataSetChanged()
+    }
+
+    private fun sendMessageToServer (message: String) {
+        val randomUUIDString = uuid.toString()
+        val chat = Chat()
+        chat.message = message.toString()
+        chat.imagebase64 = "test"
+        chat.time = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.US)
+            .format(Date())
+        chat.senderUUID = randomUUIDString
+        val requestCall = RetroInstance.api.sendMessage(chat)
+
+        requestCall.enqueue(object: Callback<ApiResponse> {
+
+            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+                println("masuk response")
+                if (response.isSuccessful) {
+                    var responseApi = response.body() // Use it or ignore it
+                    println(responseApi)
+                } else {
+                }
+            }
+
+            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                println("masuk on failure")
+                println(t.message)
+            }
+        })
     }
 
 }
