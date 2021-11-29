@@ -8,9 +8,10 @@
     android:paddingTop="@dimen/vertical_margin_8dp">
 
     <RelativeLayout
+        android:id="@+id/background_layout_chat_my_self"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
+        android:layout_marginLeft="100dp"
         android:background="@drawable/background_chat_my_self"
         android:paddingLeft="@dimen/horizontal_margin_8dp"
         android:paddingTop="@dimen/vertical_margin_8dp"
@@ -22,25 +23,33 @@
             android:id="@+id/text_view_message_item_layout_chat_my_self"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/text_view_date_time_item_layout_chat_my_self"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginBottom="25dp"
             android:text="Message"
-            android:textColor="#212121" />
+            android:textColor="@color/white" />
 
         <ImageView
             android:id="@+id/image_view_message_item_layout_chat_my_self"
             android:layout_width="192dp"
             android:layout_height="192dp"
-            android:layout_below="@+id/text_view_date_time_item_layout_chat_my_self" />
-
-        <TextView
-            android:id="@+id/text_view_date_time_item_layout_chat_my_self"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:text="2018-05-12 13:05"
-            android:textStyle="italic" />
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginBottom="25dp" />
 
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/text_view_date_time_item_layout_chat_my_self"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="216dp"
+        android:layout_marginEnd="322dp"
+        android:text="2018-05-12 13:05"
+        android:textStyle="italic"
+        android:layout_toLeftOf="@id/background_layout_chat_my_self"
+        android:layout_alignBottom="@+id/background_layout_chat_my_self"/>
 
 </RelativeLayout>
