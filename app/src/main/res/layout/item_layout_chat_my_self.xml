@@ -7,50 +7,53 @@
     android:paddingBottom="@dimen/vertical_margin_8dp"
     android:paddingTop="@dimen/vertical_margin_8dp">
 
-    <RelativeLayout
-        android:id="@+id/background_layout_chat_my_self"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="100dp"
-        android:background="@drawable/background_chat_my_self"
-        android:paddingLeft="@dimen/horizontal_margin_8dp"
-        android:paddingTop="@dimen/vertical_margin_8dp"
-        android:paddingRight="@dimen/horizontal_margin_8dp"
-        android:paddingBottom="@dimen/vertical_margin_8dp"
-        tools:ignore="UselessParent">
+        android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/text_view_message_item_layout_chat_my_self"
-            android:layout_width="match_parent"
+            android:id="@+id/text_view_date_time_item_layout_chat_my_self"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="10dp"
-            android:text="Message"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:layout_gravity="bottom"
+            android:text="2018-05-12 13:05"
+            android:textStyle="italic" />
 
-        <ImageView
-            android:id="@+id/image_view_message_item_layout_chat_my_self"
-            android:layout_width="192dp"
-            android:layout_height="192dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="10dp" />
+        <RelativeLayout
+            android:id="@+id/background_layout_chat_my_self"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_chat_my_self"
+            android:paddingLeft="@dimen/horizontal_margin_8dp"
+            android:paddingTop="@dimen/vertical_margin_8dp"
+            android:paddingRight="@dimen/horizontal_margin_8dp"
+            android:paddingBottom="@dimen/vertical_margin_8dp"
+            tools:ignore="UselessParent">
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/text_view_message_item_layout_chat_my_self"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginBottom="5dp"
+                android:text="Message"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/text_view_date_time_item_layout_chat_my_self"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="216dp"
-        android:layout_marginEnd="322dp"
-        android:text="2018-05-12 13:05"
-        android:textStyle="italic"
-        android:layout_toLeftOf="@id/background_layout_chat_my_self"
-        android:layout_alignBottom="@+id/background_layout_chat_my_self"/>
+            <ImageView
+                android:id="@+id/image_view_message_item_layout_chat_my_self"
+                android:layout_width="192dp"
+                android:layout_height="192dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="25dp"
+                android:layout_marginBottom="10dp" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>
