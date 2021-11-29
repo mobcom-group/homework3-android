@@ -21,6 +21,25 @@
         android:paddingRight="@dimen/horizontal_margin_8dp"
         android:paddingTop="@dimen/vertical_margin_8dp">
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="658dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_chat_activity_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/vertical_margin_8dp">
+
+                </androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
+        </ScrollView>
+
         <RadioGroup
             android:id="@+id/radio_group_activity_main"
             android:layout_width="match_parent"
@@ -50,52 +69,64 @@
 
         </RadioGroup>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_chat_activity_main"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/vertical_margin_8dp" />
-
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="250dp"
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Message"
-            android:imeOptions="actionDone"
-            android:inputType="text"
-            android:maxLines="1"
-            android:singleLine="true"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="258dp"
+            app:cardBackgroundColor="#E6E6E6"
+            app:cardCornerRadius="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/button_send_image_activity_main"/>
+            app:layout_constraintRight_toLeftOf="@id/button_send_message_activity_main"
+            tools:ignore="MissingConstraints">
 
-        <Button
-            android:id="@+id/button_send_image_activity_main"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:foreground="@drawable/ic_baseline_image_24_white"
-            android:foregroundGravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/button_send_message_activity_main"
-            tools:ignore="ButtonStyle,SpeakableTextPresentCheck" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/editText"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:hint="Message"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:minHeight="48dp"
+                    android:singleLine="true" />
+
+                <Button
+                    android:id="@+id/button_send_image_activity_main"
+                    android:layout_width="40dp"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_toRightOf="@id/editText"
+                    android:foreground="@drawable/ic_baseline_image_24"
+                    android:foregroundGravity="center"
+                    android:radius="100dp"
+                    app:cornerRadius="100dp"
+                    tools:ignore="ButtonStyle,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
 
         <Button
             android:id="@+id/button_send_message_activity_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Send"
+            app:backgroundTint="@color/colorGreen"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            tools:ignore="ButtonStyle" />
+            tools:ignore="ButtonStyle"
+            android:layout_marginRight="@dimen/vertical_margin_8dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>

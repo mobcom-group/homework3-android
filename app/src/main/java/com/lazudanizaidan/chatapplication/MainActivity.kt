@@ -113,6 +113,7 @@ class MainActivity : AppCompatActivity() {
         val buttonSendMessage: Button = findViewById(R.id.button_send_message_activity_main)
         buttonSendMessage.setOnClickListener {
             sendTextMessage()
+            editText.setText("")
 
         }
         val buttonSendImage: Button = findViewById(R.id.button_send_image_activity_main)
