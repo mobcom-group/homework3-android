@@ -111,6 +111,7 @@
                     android:foreground="@drawable/ic_baseline_image_24"
                     android:foregroundGravity="center"
                     android:radius="100dp"
+                    app:backgroundTint="@color/colorPurple"
                     app:cornerRadius="100dp"
                     tools:ignore="ButtonStyle,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
             </LinearLayout>
@@ -121,12 +122,12 @@
             android:id="@+id/button_send_message_activity_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/vertical_margin_8dp"
             android:text="Send"
-            app:backgroundTint="@color/colorGreen"
+            app:backgroundTint="@color/colorBlue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            tools:ignore="ButtonStyle"
-            android:layout_marginRight="@dimen/vertical_margin_8dp"/>
+            tools:ignore="ButtonStyle" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>
