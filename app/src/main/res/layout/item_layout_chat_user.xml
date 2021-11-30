@@ -36,15 +36,21 @@
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 
-            <ImageView
-                android:id="@+id/image_view_message_item_layout_chat_user"
-                android:layout_width="192dp"
-                android:layout_height="192dp"
-                android:layout_centerVertical="true"
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="45dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="40dp"
-                android:layout_marginBottom="10dp" />
+                android:layout_marginBottom="10dp"
+                app:cardBackgroundColor="#00FFFFFF"
+                app:cardCornerRadius="25dp">
+
+                <ImageView
+                    android:id="@+id/image_view_message_item_layout_chat_user"
+                    android:layout_width="192dp"
+                    android:layout_height="192dp" />
+            </androidx.cardview.widget.CardView>
 
         </RelativeLayout>
 
