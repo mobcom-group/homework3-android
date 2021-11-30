@@ -42,7 +42,6 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -63,12 +62,11 @@ class MainActivity : AppCompatActivity() {
             val receivedMessage = intent.getStringExtra("message")
             val time = intent.getStringExtra("time");
             val senderUUID = intent.getStringExtra("senderUUID");
-//            println(time +  "sender nih: " + senderUUID)
             if (receivedMessage != null && senderUUID != uuid.toString() ) {
                 if (intent.getStringExtra("type") == "text") {
-                    sendMessageFromTopicToChat(receivedMessage)
+                    sendMessageFromTopicToChat(receivedMessage, time)
                 } else {
-                    sendImageFromTopicToChat(receivedMessage)
+                    sendImageFromTopicToChat(receivedMessage, time)
                 }
             }
         }
@@ -89,7 +87,6 @@ class MainActivity : AppCompatActivity() {
             // Log and toast
             val msg = getString(R.string.msg_token_fmt, token)
             Log.d(TAG, msg)
-            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
             val tokenJson = Token()
             tokenJson.token = token.toString()
             val requestCall = RetroInstance.api.registerToken(tokenJson)
@@ -97,7 +94,6 @@ class MainActivity : AppCompatActivity() {
             requestCall.enqueue(object: Callback<ApiResponse> {
 
                 override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
-                    println("masuk response")
                     if (response.isSuccessful) {
                         var responseApi = response.body()
                         println(responseApi)
@@ -107,7 +103,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                    println("masuk on failure")
                     println(t.message)
                 }
             })
@@ -133,6 +128,20 @@ class MainActivity : AppCompatActivity() {
             sendImageMessage()
         }
         setupAdapterRecyclerView()
+        intent.extras?.let {
+            for (key in it.keySet()) {
+                val value = intent.extras?.get(key)
+                Log.d(TAG, "Key: $key Value: $value")
+            }
+            val body = intent.extras?.get("body")
+            val time = intent.extras?.get("time")
+            if (body == "image") {
+                val imageUrl = intent.extras?.get("image")
+                sendImageFromTopicToChat(imageUrl as String, time as String)
+            } else {
+                sendMessageFromTopicToChat(body as String, time as String)
+            }
+        }
     }
 
     private fun checkRuntimePermissions() {
@@ -182,13 +191,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun sendTextMessage() {
-//        val radioGroup: RadioGroup = findViewById(R.id.radio_group_activity_main)
-//        val idTypeChat = radioGroup.checkedRadioButtonId
-//        val typeChat = if (idTypeChat == R.id.radio_button_my_self_activity_main) {
-//            AdapterChat.VIEW_TYPE_MY_SELF
-//        } else {
-//            AdapterChat.VIEW_TYPE_USER
-//        }
         val typeChat = AdapterChat.VIEW_TYPE_MY_SELF
         val editText: EditText = findViewById(R.id.editText)
         val message = editText.text.toString().trim()
@@ -198,7 +200,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             val dateTime = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.US)
                 .format(Date())
-            val chat = Chat(message = message, time = dateTime, imagebase64 = "")
+            val chat = Chat(message = message, time = dateTime, imagePath = "")
             listViewType.add(typeChat)
             listChat.add(chat)
             adapterChat.notifyDataSetChanged()
@@ -232,7 +234,7 @@ class MainActivity : AppCompatActivity() {
                         val message = ""
                         val dateTime = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.US)
                             .format(Date())
-                        val chat = Chat(message = message, time = dateTime, imagebase64 = fileImage.absolutePath)
+                        val chat = Chat(message = message, time = dateTime, imagePath = fileImage.absolutePath)
                         listViewType.add(typeChat)
                         listChat.add(chat)
                         adapterChat.notifyDataSetChanged()
@@ -267,7 +269,7 @@ class MainActivity : AppCompatActivity() {
                         val message = ""
                         val dateTime = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.US)
                             .format(Date())
-                        val chat = Chat(message = message, time = dateTime, imagebase64 = fileImage.absolutePath)
+                        val chat = Chat(message = message, time = dateTime, imagePath = fileImage.absolutePath)
                         listViewType.add(typeChat)
                         listChat.add(chat)
                         adapterChat.notifyDataSetChanged()
@@ -297,22 +299,17 @@ class MainActivity : AppCompatActivity() {
         return null
     }
 
-    private fun sendMessageFromTopicToChat(message: String) {
+    private fun sendMessageFromTopicToChat(message: String, messageTime: String?) {
         val typeChat = AdapterChat.VIEW_TYPE_USER
-        val dateTime = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.US)
-            .format(Date())
-        val chat = Chat(message = message, time = dateTime, imagebase64 = "")
+        val chat = Chat(message = message, time = messageTime, imagePath = "")
         listViewType.add(typeChat)
         listChat.add(chat)
         adapterChat.notifyDataSetChanged()
     }
 
-    private fun sendImageFromTopicToChat(imageUrl: String) {
-        println(imageUrl + "~~~")
+    private fun sendImageFromTopicToChat(imageUrl: String, messageTime: String?) {
         val typeChat = AdapterChat.VIEW_TYPE_USER
-        val dateTime = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.US)
-            .format(Date())
-        val chat = Chat(imageURL = imageUrl, message = "", time = dateTime, imagebase64 = "")
+        val chat = Chat(imageURL = imageUrl, message = "", time = messageTime, imagePath = "")
         listViewType.add(typeChat)
         listChat.add(chat)
         adapterChat.notifyDataSetChanged()
@@ -321,8 +318,8 @@ class MainActivity : AppCompatActivity() {
     private fun sendMessageToServer (message: String) {
         val randomUUIDString = uuid.toString()
         val chat = Chat()
-        chat.message = message.toString()
-        chat.imagebase64 = "test"
+        chat.message = message
+        chat.imagePath = ""
         chat.time = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.US)
             .format(Date())
         chat.senderUUID = randomUUIDString
@@ -331,7 +328,6 @@ class MainActivity : AppCompatActivity() {
         requestCall.enqueue(object: Callback<ApiResponse> {
 
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
-                println("masuk response")
                 if (response.isSuccessful) {
                     var responseApi = response.body() // Use it or ignore it
                     println(responseApi)
@@ -340,7 +336,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                println("masuk on failure")
                 println(t.message)
             }
         })
@@ -362,7 +357,6 @@ class MainActivity : AppCompatActivity() {
         requestCall.enqueue(object: Callback<ApiResponse> {
 
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
-                println("masuk response 2")
                 if (response.isSuccessful) {
                     var responseApi = response.body() // Use it or ignore it
                     println(responseApi)
@@ -371,7 +365,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                println("masuk on failure 2")
                 println(t.message)
             }
         })

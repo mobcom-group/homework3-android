@@ -40,7 +40,7 @@ class AdapterChat constructor(private val listViewType: List<Int>,
                     chat.apply {
                         viewHolderChatItemMySelf.textViewDateTime.text = this.time
                         viewHolderChatItemMySelf.textViewMessage.text = this.message
-                        val bitmap = BitmapFactory.decodeFile(this.imagebase64)
+                        val bitmap = BitmapFactory.decodeFile(this.imagePath)
                         viewHolderChatItemMySelf.imageViewMessage.setImageBitmap(bitmap)
                         if (this.message!!.isEmpty()) {
                             viewHolderChatItemMySelf.textViewMessage.visibility = View.GONE
