@@ -128,18 +128,14 @@ class MainActivity : AppCompatActivity() {
             sendImageMessage()
         }
         setupAdapterRecyclerView()
-        intent.extras?.let {
-            for (key in it.keySet()) {
-                val value = intent.extras?.get(key)
-                Log.d(TAG, "Key: $key Value: $value")
-            }
+        if(intent.hasExtra("body")) {
             val body = intent.extras?.get("body")
             val time = intent.extras?.get("time")
             if (body == "image") {
                 val imageUrl = intent.extras?.get("image")
                 sendImageFromTopicToChat(imageUrl as String, time as String)
             } else {
-                sendMessageFromTopicToChat(body as String, time as String)
+                    sendMessageFromTopicToChat(body as String, time as String)
             }
         }
     }
