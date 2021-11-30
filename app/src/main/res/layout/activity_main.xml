@@ -120,9 +120,9 @@
                         android:layout_gravity="right"
                         android:layout_marginRight="5dp"
                         android:layout_toRightOf="@id/editText"
-                        android:foreground="@drawable/ic_baseline_image_24"
+                        android:foreground="@drawable/ic_baseline_image_24_white"
                         android:foregroundGravity="center"
-                        app:backgroundTint="@color/colorPurple"
+                        app:backgroundTint="@color/colorGreen"
                         app:cornerRadius="100dp"
                         app:layout_constraintStart_toStartOf="@id/editText"
                         tools:ignore="ButtonStyle,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
