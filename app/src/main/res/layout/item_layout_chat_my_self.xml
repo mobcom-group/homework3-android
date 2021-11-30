@@ -47,9 +47,8 @@
                 android:id="@+id/image_view_message_item_layout_chat_my_self"
                 android:layout_width="192dp"
                 android:layout_height="192dp"
-                android:layout_marginStart="25dp"
+                android:layout_centerInParent="true"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="25dp"
                 android:layout_marginBottom="10dp" />
 
         </RelativeLayout>
