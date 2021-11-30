@@ -38,36 +38,17 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // messages. For more see: https://firebase.google.com/docs/cloud-messaging/concept-options
         // [END_EXCLUDE]
 
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(TAG, "From: ${remoteMessage.from}")
-
-        // Check if message contains a data payload.
-        if (remoteMessage.data.isNotEmpty()) {
-            Log.d(TAG, "Message data payload: ${remoteMessage.data}")
-
-//            if (/* Check if data needs to be processed by long running job */ true) {
-//                // For long-running tasks (10 seconds or more) use WorkManager.
-////                scheduleJob()
-//            } else {
-//                // Handle message within 10 seconds
-//                handleNow()
-//            }
+        val intent = Intent("message")
+        if(remoteMessage.notification!!.body == "image") {
+            intent.putExtra("message", remoteMessage.notification!!.imageUrl.toString())
+            intent.putExtra("type", "image")
+        } else {
+            intent.putExtra("message", remoteMessage.notification!!.body)
+            intent.putExtra("type", "text")
         }
-
-        // Check if message contains a notification payload.
-        remoteMessage.notification?.let {
-//            it.body?.let { it1 -> sendMessageFromTopicToChat(it1) }
-            Log.d(TAG, "Message Notification Body: ${it.body}")
-        }
-
-        val intent: Intent = Intent("message").putExtra("message", remoteMessage.notification!!.body)
         intent.putExtra("time", remoteMessage.data["time"])
         intent.putExtra("senderUUID", remoteMessage.data["senderUUID"])
-//        println(remoteMessage.data["time"] + "myfirebase ")
         LocalBroadcastManager.getInstance(this@MyFirebaseMessagingService).sendBroadcast(intent)
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
     }
     // [END receive_message]
 

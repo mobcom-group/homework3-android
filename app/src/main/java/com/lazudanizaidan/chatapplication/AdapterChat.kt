@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
 class AdapterChat constructor(private val listViewType: List<Int>,
                               private val listChat: List<Chat>) : RecyclerView.Adapter<AdapterChat.ViewHolder>() {
@@ -55,8 +56,7 @@ class AdapterChat constructor(private val listViewType: List<Int>,
                     chat.apply {
                         viewHolderChatUser.textViewDateTime.text = chat.time
                         viewHolderChatUser.textViewMessage.text = chat.message
-                        val bitmap = BitmapFactory.decodeFile(this.imagebase64)
-                        viewHolderChatUser.imageViewMessage.setImageBitmap(bitmap)
+                        Glide.with(viewHolderChatUser.itemView.context).load(chat.imageURL).into(viewHolderChatUser.imageViewMessage)
                         if (this.message!!.isEmpty()) {
                             viewHolderChatUser.textViewMessage.visibility = View.GONE
                             viewHolderChatUser.imageViewMessage.visibility = View.VISIBLE

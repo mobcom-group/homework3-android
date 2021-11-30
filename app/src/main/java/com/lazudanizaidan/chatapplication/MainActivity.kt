@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.media.MediaScannerConnection
 import android.os.Build
 import android.os.Bundle
@@ -29,6 +30,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.lazudanizaidan.chatapplication.api.RetroInstance
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,8 +42,10 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var listViewType: MutableList<Int>
@@ -53,11 +61,15 @@ class MainActivity : AppCompatActivity() {
     private val mReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
             val receivedMessage = intent.getStringExtra("message")
-            val time = intent?.getStringExtra("time");
-            val senderUUID = intent?.getStringExtra("senderUUID");
+            val time = intent.getStringExtra("time");
+            val senderUUID = intent.getStringExtra("senderUUID");
 //            println(time +  "sender nih: " + senderUUID)
             if (receivedMessage != null && senderUUID != uuid.toString() ) {
-                sendMessageFromTopicToChat(receivedMessage)
+                if (intent.getStringExtra("type") == "text") {
+                    sendMessageFromTopicToChat(receivedMessage)
+                } else {
+                    sendImageFromTopicToChat(receivedMessage)
+                }
             }
         }
     }
@@ -149,8 +161,8 @@ class MainActivity : AppCompatActivity() {
             AdapterChat.VIEW_TYPE_USER
         }
         val builderAlertDialog = AlertDialog.Builder(this)
-            .setTitle("Pilih Aksi")
-            .setItems(arrayOf("Gallery", "Kamera")) { dialogInterface, indexItem ->
+            .setTitle("Choose Action")
+            .setItems(arrayOf("Gallery", "Camera")) { dialogInterface, indexItem ->
                 dialogInterface.dismiss()
                 when (indexItem) {
                     0 -> {
@@ -166,6 +178,7 @@ class MainActivity : AppCompatActivity() {
             }
         val alertDialog = builderAlertDialog.create()
         alertDialog.show()
+
     }
 
     private fun sendTextMessage() {
@@ -223,6 +236,7 @@ class MainActivity : AppCompatActivity() {
                         listViewType.add(typeChat)
                         listChat.add(chat)
                         adapterChat.notifyDataSetChanged()
+                        sendImageToServer(fileImage)
                     }
                 }
                 requestCodeCamera -> {
@@ -257,6 +271,7 @@ class MainActivity : AppCompatActivity() {
                         listViewType.add(typeChat)
                         listChat.add(chat)
                         adapterChat.notifyDataSetChanged()
+                        sendImageToServer(fileImage)
                     } catch (e: IOException) {
                         e.printStackTrace()
                     }
@@ -292,6 +307,17 @@ class MainActivity : AppCompatActivity() {
         adapterChat.notifyDataSetChanged()
     }
 
+    private fun sendImageFromTopicToChat(imageUrl: String) {
+        println(imageUrl + "~~~")
+        val typeChat = AdapterChat.VIEW_TYPE_USER
+        val dateTime = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.US)
+            .format(Date())
+        val chat = Chat(imageURL = imageUrl, message = "", time = dateTime, imagebase64 = "")
+        listViewType.add(typeChat)
+        listChat.add(chat)
+        adapterChat.notifyDataSetChanged()
+    }
+
     private fun sendMessageToServer (message: String) {
         val randomUUIDString = uuid.toString()
         val chat = Chat()
@@ -315,6 +341,37 @@ class MainActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
                 println("masuk on failure")
+                println(t.message)
+            }
+        })
+    }
+
+    private fun sendImageToServer (imageFile: File) {
+        val randomUUIDString = uuid.toString()
+        val requestFile: RequestBody =
+            imageFile.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+        val imageBody = MultipartBody.Part.createFormData("image", imageFile.name, requestFile)
+        val senderUUID: RequestBody =
+            randomUUIDString.toRequestBody("multipart/form-data".toMediaTypeOrNull())
+        val time: RequestBody =
+            SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.US)
+                .format(Date()).toRequestBody("multipart/form-data".toMediaTypeOrNull())
+
+        val requestCall = RetroInstance.api.sendImage(senderUUID, time, imageBody)
+
+        requestCall.enqueue(object: Callback<ApiResponse> {
+
+            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+                println("masuk response 2")
+                if (response.isSuccessful) {
+                    var responseApi = response.body() // Use it or ignore it
+                    println(responseApi)
+                } else {
+                }
+            }
+
+            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                println("masuk on failure 2")
                 println(t.message)
             }
         })
